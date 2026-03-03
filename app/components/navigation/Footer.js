@@ -11,7 +11,7 @@ const Footer = () => {
             <p className="text-sm text-base-content/70">
               &copy; {currentYear} Aclevo. Licensed under the GPLv3 license. See{" "}
               <a href="https://github.com/Aclevo/new-website/blob/main/LICENSE">
-                LICENSE.md
+                LICENSE
               </a>{" "}
               for more information.
             </p>
