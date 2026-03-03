@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+    name: "glass";
+    default: true;
+    prefersdark: true;
+    color-scheme: dark;
+
+    --color-base-100: oklch(14% 0.015 255);
+    --color-base-200: oklch(18% 0.02 255);
+    --color-base-300: oklch(23% 0.025 255);
+    --color-base-content: oklch(96% 0.01 250);
+    --color-primary: oklch(68% 0.12 218);
+    --color-primary-content: oklch(14% 0.03 230);
+    --color-secondary: oklch(62% 0.13 285);
+    --color-secondary-content: oklch(16% 0.04 285);
+    --color-accent: oklch(72% 0.1 165);
+    --color-accent-content: oklch(17% 0.04 165);
+    --color-neutral: oklch(22% 0.02 250);
+    --color-neutral-content: oklch(94% 0.01 250);
+    --color-info: oklch(66% 0.09 235);
+    --color-info-content: oklch(14% 0.03 235);
+    --color-success: oklch(70% 0.1 152);
+    --color-success-content: oklch(17% 0.04 152);
+    --color-warning: oklch(77% 0.11 88);
+    --color-warning-content: oklch(20% 0.05 88);
+    --color-error: oklch(65% 0.15 25);
+    --color-error-content: oklch(15% 0.04 25);
+
+    --radius-selector: 1rem;
+    --radius-field: 1rem;
+    --radius-box: 1.5rem;
+
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+
+    --border: 1px;
+
+    --depth: 1;
+    --noise: 0;
+}
