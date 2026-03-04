@@ -29,7 +29,7 @@ export async function getProjects() {
   if (!res.ok) throw new Error("Failed to fetch org repos");
   const repos = await res.json();
   return repos
-    .filter((repo) => !repo.fork && repo.name !== ".github") // Only show original repos, exclude .github
+    .filter((repo) => !repo.fork && !repo.archived && repo.name !== ".github") // Only show original repos, exclude .github
     .map((repo) => ({
       name: repo.name,
       summary: repo.description || "No description",
@@ -42,15 +42,40 @@ export async function getProjects() {
 }
 
 export async function getStats() {
-  const res = await fetch(`${GITHUB_ORG_URL}`, {
+  const [orgRes, membersRes] = await Promise.all([
+    fetch(`${GITHUB_ORG_URL}`, {
+      headers: { Accept: "application/vnd.github.v3+json" },
+      next: { revalidate: 300 },
+    }),
+    fetch(`${GITHUB_ORG_URL}/members`, {
+      headers: { Accept: "application/vnd.github.v3+json" },
+      next: { revalidate: 300 },
+    }),
+  ]);
+
+  if (!orgRes.ok) throw new Error("Failed to fetch org data");
+  if (!membersRes.ok) throw new Error("Failed to fetch members");
+
+  const orgData = await orgRes.json();
+  const members = await membersRes.json();
+
+  return [
+    { label: "Public Repos", value: orgData.public_repos },
+    { label: "Followers", value: orgData.followers },
+    { label: "Public Members", value: members.length },
+  ];
+}
+
+export async function getMembers() {
+  const res = await fetch(`${GITHUB_ORG_URL}/members`, {
     headers: { Accept: "application/vnd.github.v3+json" },
     next: { revalidate: 300 },
   });
-  if (!res.ok) throw new Error("Failed to fetch org data");
-  const data = await res.json();
-  return [
-    { label: "Public Repos", value: data.public_repos },
-    { label: "Followers", value: data.followers },
-    { label: "Members", value: 11 },
-  ];
+  if (!res.ok) throw new Error("Failed to fetch org members");
+  const members = await res.json();
+  return members.map((member) => ({
+    username: member.login,
+    html_url: member.html_url,
+    avatar_url: member.avatar_url,
+  }));
 }
