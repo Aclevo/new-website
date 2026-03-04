@@ -74,6 +74,7 @@ export async function getMembers() {
   if (!res.ok) throw new Error("Failed to fetch org members");
   const members = await res.json();
   return members.map((member) => ({
+    id: member.id,
     username: member.login,
     html_url: member.html_url,
     avatar_url: member.avatar_url,

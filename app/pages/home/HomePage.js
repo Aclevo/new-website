@@ -1,11 +1,20 @@
 import Link from "next/link";
-import { siteTitle, getTopProject, getProjects, getStats } from "./data";
+import Image from "next/image";
+
+import {
+  siteTitle,
+  getTopProject,
+  getProjects,
+  getStats,
+  getMembers,
+} from "./data";
 
 const HomePage = async () => {
-  const [topProject, projects, stats] = await Promise.all([
+  const [topProject, projects, stats, members] = await Promise.all([
     getTopProject(),
     getProjects(),
     getStats(),
+    getMembers(),
   ]);
 
   return (
@@ -92,7 +101,7 @@ const HomePage = async () => {
         </div>
       </section>
 
-      <section id="contributors" className="grid gap-4 md:grid-cols-3">
+      <section id="statistics" className="grid gap-4 md:grid-cols-3">
         {stats.map((stat) => (
           <article
             key={stat.label}
@@ -104,6 +113,28 @@ const HomePage = async () => {
             </div>
           </article>
         ))}
+      </section>
+
+      <section id="members" className="grid gap-4 md:grid-cols-3">
+        {members
+          .sort((a, b) => a.id - b.id)
+          .map((member) => (
+            <article
+              key={member.username}
+              className="card border border-white/15 bg-base-100/25 shadow-lg backdrop-blur-xl"
+            >
+              <div className="card-body flex flex-col items-center">
+                <Image
+                  className="rounded-full"
+                  width={48}
+                  height={48}
+                  src={member.avatar_url}
+                  alt={member.username}
+                />
+                <h2 className="card-title text-xl">{member.username}</h2>
+              </div>
+            </article>
+          ))}
       </section>
 
       <section id="projects" className="grid gap-4 md:grid-cols-3">
