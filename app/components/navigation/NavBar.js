@@ -22,7 +22,7 @@ const renderLinks = () => {
 const NavBar = () => {
   return (
     <nav
-      className={` ${AntaFont.className} navbar sticky top-4 z-40 rounded-3xl border border-white/15 bg-base-100/30 px-4 shadow-2xl shadow-black/30 backdrop-blur-xl`}
+      className={` ${AntaFont.className} navbar sticky top-4 z-40 rounded-3xl border border-white/15 bg-base-100/30 px-4 py-4 shadow-2xl shadow-black/30 backdrop-blur-xl`}
     >
       <div className="navbar-start">
         <div className="dropdown">
@@ -65,7 +65,7 @@ const NavBar = () => {
 
       <div className="navbar-end">
         <a href="https://github.com/Aclevo/">
-          <button className="btn btn-primary btn-soft text-xl">
+          <button className="btn btn-primary btn-soft text-xl py-7">
             Star on GitHub
           </button>
         </a>
