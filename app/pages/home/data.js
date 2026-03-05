@@ -1,15 +1,21 @@
 export const siteTitle = "Aclevo";
 
-const GITHUB_REPOS_URL = "https://api.github.com/repos/Aclevo/";
-const GITHUB_ORG_URL = "https://api.github.com/orgs/Aclevo";
+const GITHUB_API = "https://api.github.com";
+const ORG = "Aclevo";
+const HEADERS = { Accept: "application/vnd.github.v3+json" };
+const REVALIDATE = 300;
+
+const fetchJson = async (url) => {
+  const res = await fetch(url, {
+    headers: HEADERS,
+    next: { revalidate: REVALIDATE },
+  });
+  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+  return res.json();
+};
 
 export async function getTopProject() {
-  const res = await fetch(`${GITHUB_REPOS_URL}LBNets`, {
-    headers: { Accept: "application/vnd.github.v3+json" },
-    next: { revalidate: 300 }, // Revalidate every 5 minutes
-  });
-  if (!res.ok) throw new Error("Failed to fetch LBNets repo");
-  const data = await res.json();
+  const data = await fetchJson(`${GITHUB_API}/repos/${ORG}/LBNets`);
   return {
     name: "LBNets",
     tagline: "A revolution in AI technology with baked-in reasoning",
@@ -22,14 +28,9 @@ export async function getTopProject() {
 }
 
 export async function getProjects() {
-  const res = await fetch(`${GITHUB_ORG_URL}/repos`, {
-    headers: { Accept: "application/vnd.github.v3+json" },
-    next: { revalidate: 300 },
-  });
-  if (!res.ok) throw new Error("Failed to fetch org repos");
-  const repos = await res.json();
+  const repos = await fetchJson(`${GITHUB_API}/orgs/${ORG}/repos`);
   return repos
-    .filter((repo) => !repo.fork && !repo.archived && repo.name !== ".github") // Only show original repos, exclude .github
+    .filter((repo) => !repo.fork && !repo.archived && repo.name !== ".github")
     .map((repo) => ({
       name: repo.name,
       summary: repo.description || "No description",
@@ -42,23 +43,10 @@ export async function getProjects() {
 }
 
 export async function getStats() {
-  const [orgRes, membersRes] = await Promise.all([
-    fetch(`${GITHUB_ORG_URL}`, {
-      headers: { Accept: "application/vnd.github.v3+json" },
-      next: { revalidate: 300 },
-    }),
-    fetch(`${GITHUB_ORG_URL}/members`, {
-      headers: { Accept: "application/vnd.github.v3+json" },
-      next: { revalidate: 300 },
-    }),
+  const [orgData, members] = await Promise.all([
+    fetchJson(`${GITHUB_API}/orgs/${ORG}`),
+    fetchJson(`${GITHUB_API}/orgs/${ORG}/members`),
   ]);
-
-  if (!orgRes.ok) throw new Error("Failed to fetch org data");
-  if (!membersRes.ok) throw new Error("Failed to fetch members");
-
-  const orgData = await orgRes.json();
-  const members = await membersRes.json();
-
   return [
     { label: "Public Repos", value: orgData.public_repos },
     { label: "Followers", value: orgData.followers },
@@ -67,16 +55,24 @@ export async function getStats() {
 }
 
 export async function getMembers() {
-  const res = await fetch(`${GITHUB_ORG_URL}/members`, {
-    headers: { Accept: "application/vnd.github.v3+json" },
-    next: { revalidate: 300 },
-  });
-  if (!res.ok) throw new Error("Failed to fetch org members");
-  const members = await res.json();
-  return members.map((member) => ({
-    id: member.id,
-    username: member.login,
-    html_url: member.html_url,
-    avatar_url: member.avatar_url,
+  const members = await fetchJson(`${GITHUB_API}/orgs/${ORG}/members`);
+  const users = await Promise.all(
+    members.map((m) => fetchJson(`${GITHUB_API}/users/${m.login}`)),
+  );
+  const socials = await Promise.all(
+    users.map((u) =>
+      fetchJson(`${GITHUB_API}/users/${u.login}/social_accounts`).catch(
+        () => [],
+      ),
+    ),
+  );
+
+  return users.map((user, i) => ({
+    id: user.id,
+    username: user.login,
+    html_url: user.html_url,
+    avatar_url: user.avatar_url,
+    bio: user.bio,
+    socials: socials[i] || [],
   }));
 }

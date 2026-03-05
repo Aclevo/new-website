@@ -108,8 +108,9 @@ const HomePage = async () => {
           </div>
         </div>
       </section>
-
+      <div className="divider divider-primary">Public Members</div>
       <MemberList members={members} />
+      <div className="divider divider-primary">Our Projects</div>
       <ProjectList projects={projects} />
 
       <section
