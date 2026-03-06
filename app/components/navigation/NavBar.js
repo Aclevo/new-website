@@ -1,6 +1,9 @@
-import { config } from "../../config";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Anta } from "next/font/google";
+import { config } from "../../config";
 
 const AntaFont = Anta({ subsets: ["latin"], weight: "400" });
 
@@ -21,6 +24,8 @@ const renderLinks = () => {
 };
 
 const NavBar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <nav
       className={` ${AntaFont.className} navbar sticky top-4 z-40 rounded-3xl border border-white/15 bg-base-100/30 px-4 py-4 shadow-2xl shadow-black/30 backdrop-blur-xl`}
@@ -30,6 +35,8 @@ const NavBar = () => {
           <button
             className="btn btn-ghost btn-circle lg:hidden"
             aria-label="Open menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(!menuOpen)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +56,7 @@ const NavBar = () => {
           <ul
             tabIndex={0}
             className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-56 border border-white/15 bg-base-200/70 p-2 shadow-xl backdrop-blur-xl"
+            onClick={() => setMenuOpen(false)}
           >
             {renderLinks()}
           </ul>

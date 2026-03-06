@@ -2,7 +2,9 @@ import { SiGithub, SiDiscord } from "@icons-pack/react-simple-icons";
 import { config } from "../../config";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  // Use a fixed year to avoid issues with static rendering
+  // Update this value annually or use a client component for dynamic year
+  const currentYear = 2026;
 
   return (
     <footer className="mt-16 border-t border-white/15 bg-base-100/25 backdrop-blur-xl">
@@ -12,7 +14,10 @@ const Footer = () => {
             <p className="text-sm text-base-content/70">
               &copy; {currentYear} {config.org.name}. Licensed under the{" "}
               {config.site.license} license. See{" "}
-              <a href="https://github.com/Aclevo/new-website/blob/main/LICENSE">
+              <a
+                href="https://github.com/Aclevo/new-website/blob/main/LICENSE"
+                className="link link-primary"
+              >
                 LICENSE
               </a>{" "}
               for more information.

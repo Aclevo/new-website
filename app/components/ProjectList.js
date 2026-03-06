@@ -14,7 +14,7 @@ const ProjectList = ({ projects }) => {
               <a
                 href={project.html_url}
                 target="_blank"
-                className="hover:text-primary"
+                className="link link-primary link-hover"
               >
                 {project.name}
               </a>

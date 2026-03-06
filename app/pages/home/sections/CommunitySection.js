@@ -15,9 +15,10 @@ const CommunitySection = ({ stats }) => {
           </h1>
           <p className="text-base-content/80">
             {config.site.title} provides many different projects across various
-            open source technologies and programming languages. We also build our
-            own operating system based on Debian. Our repositories are open and
-            accessible to anyone, licensed under the GNU General Public License.
+            open source technologies and programming languages. We also build
+            our own operating system based on Debian. Our repositories are open
+            and accessible to anyone, licensed under the GNU General Public
+            License.
           </p>
 
           <div className="flex flex-wrap gap-3">

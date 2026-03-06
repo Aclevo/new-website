@@ -1,20 +1,49 @@
+import { cache } from "react";
+import { notFound } from "next/navigation";
 import { config } from "../../config";
 
 const { org, github } = config;
 
-const fetchJson = async (url) => {
-  const res = await fetch(url, {
-    headers: github.headers,
-    next: { revalidate: github.revalidate },
-  });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+const fetchWithRetry = async (url, retries = 3) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url, {
+        headers: github.headers,
+        next: { revalidate: github.revalidate },
+      });
+
+      if (!res.ok) {
+        if (res.status === 404) {
+          notFound();
+        }
+        if (res.status === 429 && i < retries - 1) {
+          // Rate limited, wait and retry
+          await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
+          continue;
+        }
+        throw new Error(
+          `Failed to fetch ${url}: ${res.status} ${res.statusText}`,
+        );
+      }
+
+      return res.json();
+    } catch (error) {
+      if (i === retries - 1) {
+        console.error(
+          `Fetch error for ${url} after ${retries} retries:`,
+          error,
+        );
+        throw error;
+      }
+    }
   }
-  return res.json();
 };
 
-export async function getTopProject() {
-  const data = await fetchJson(`${org.githubApi}/repos/${org.name}/LBNets`);
+export const getTopProject = cache(async () => {
+  "use cache";
+  const data = await fetchWithRetry(
+    `${org.githubApi}/repos/${org.name}/LBNets`,
+  );
   return {
     name: "LBNets",
     tagline: "A revolution in AI technology with baked-in reasoning",
@@ -24,10 +53,11 @@ export async function getTopProject() {
     contributors: data.contributors_count,
     openIssues: data.open_issues_count,
   };
-}
+});
 
-export async function getProjects() {
-  const repos = await fetchJson(`${org.githubApi}/orgs/${org.name}/repos`);
+export const getProjects = cache(async () => {
+  "use cache";
+  const repos = await fetchWithRetry(`${org.githubApi}/orgs/${org.name}/repos`);
   return repos
     .filter(
       (repo) =>
@@ -44,28 +74,32 @@ export async function getProjects() {
       topics: repo.topics,
       html_url: repo.html_url,
     }));
-}
+});
 
-export async function getStats() {
+export const getStats = cache(async () => {
+  "use cache";
   const [orgData, members] = await Promise.all([
-    fetchJson(`${org.githubApi}/orgs/${org.name}`),
-    fetchJson(`${org.githubApi}/orgs/${org.name}/members`),
+    fetchWithRetry(`${org.githubApi}/orgs/${org.name}`),
+    fetchWithRetry(`${org.githubApi}/orgs/${org.name}/members`),
   ]);
   return [
     { label: "Public Repos", value: orgData.public_repos },
     { label: "Followers", value: orgData.followers },
     { label: "Public Members", value: members.length },
   ];
-}
+});
 
-export async function getMembers() {
-  const members = await fetchJson(`${org.githubApi}/orgs/${org.name}/members`);
+export const getMembers = cache(async () => {
+  "use cache";
+  const members = await fetchWithRetry(
+    `${org.githubApi}/orgs/${org.name}/members`,
+  );
   const users = await Promise.all(
-    members.map((m) => fetchJson(`${org.githubApi}/users/${m.login}`)),
+    members.map((m) => fetchWithRetry(`${org.githubApi}/users/${m.login}`)),
   );
   const socials = await Promise.all(
     users.map((u) =>
-      fetchJson(`${org.githubApi}/users/${u.login}/social_accounts`).catch(
+      fetchWithRetry(`${org.githubApi}/users/${u.login}/social_accounts`).catch(
         (error) => {
           console.error(
             `Failed to fetch social accounts for ${u.login}:`,
@@ -85,4 +119,4 @@ export async function getMembers() {
     bio: user.bio,
     socials: socials[i] || [],
   }));
-}
+});

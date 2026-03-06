@@ -22,7 +22,7 @@ const MemberList = ({ members }) => {
     <section id="members" className="grid gap-4 md:grid-cols-3">
       {members
         .sort((a, b) => a.id - b.id)
-        .map((member) => (
+        .map((member, index) => (
           <article
             key={member.username}
             className="card border border-white/15 bg-base-100/25 shadow-lg backdrop-blur-xl"
@@ -30,15 +30,22 @@ const MemberList = ({ members }) => {
             <div className="card-body flex flex-col items-center">
               <Image
                 className="rounded-full"
-                width={48}
-                height={48}
+                width={96}
+                height={96}
                 src={member.avatar_url}
                 alt={member.username}
+                loading={index < 3 ? "eager" : "lazy"}
+                priority={index < 3}
+                sizes="96px"
               />
               <h2 className="card-title text-xl">{member.username}</h2>
               <i className="text-center mt-2 mb-2">{member.bio}</i>
               <div className="flex flex-row items-center gap-2 mt-auto">
-                <a href={member.html_url} target="_blank">
+                <a
+                  href={member.html_url}
+                  target="_blank"
+                  aria-label={`${member.username}'s GitHub profile`}
+                >
                   <SiGithub className="h-5 w-5" />
                 </a>
                 {Array.isArray(member.socials) &&
@@ -46,7 +53,12 @@ const MemberList = ({ members }) => {
                     const IconComponent = getSocialIcon(social.provider);
                     if (!IconComponent) return null;
                     return (
-                      <a key={i} href={social.url} target="_blank">
+                      <a
+                        key={i}
+                        href={social.url}
+                        target="_blank"
+                        aria-label={`${member.username}'s ${social.provider} profile`}
+                      >
                         <IconComponent className="h-5 w-5" />
                       </a>
                     );

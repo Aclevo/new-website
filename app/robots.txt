@@ -1,0 +1,9 @@
+import { config } from "./config";
+
+export default function Robots() {
+  return `
+User-agent: *
+Allow: /
+Sitemap: ${config.org.websiteUrl}/sitemap.xml
+`.trim();
+}
