@@ -17,7 +17,7 @@ const getSocialIcon = (provider) => {
   return IconComponent || null;
 };
 
-let MemberList = ({ members }) => {
+const MemberList = ({ members }) => {
   return (
     <section id="members" className="grid gap-4 md:grid-cols-3">
       {members
@@ -38,11 +38,7 @@ let MemberList = ({ members }) => {
               <h2 className="card-title text-xl">{member.username}</h2>
               <i className="text-center mt-2 mb-2">{member.bio}</i>
               <div className="flex flex-row items-center gap-2 mt-auto">
-                <a
-                  href={member.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={member.html_url} target="_blank">
                   <SiGithub className="h-5 w-5" />
                 </a>
                 {Array.isArray(member.socials) &&
@@ -50,12 +46,7 @@ let MemberList = ({ members }) => {
                     const IconComponent = getSocialIcon(social.provider);
                     if (!IconComponent) return null;
                     return (
-                      <a
-                        key={i}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <a key={i} href={social.url} target="_blank">
                         <IconComponent className="h-5 w-5" />
                       </a>
                     );

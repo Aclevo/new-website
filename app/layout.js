@@ -1,13 +1,16 @@
 import "./globals.css";
 import SiteLayout from "./layouts/SiteLayout";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { config } from "./config";
+
+const { org, site } = config;
 
 export const metadata = {
   title: {
-    default: "Aclevo",
-    template: "%s | Aclevo",
+    default: site.title,
+    template: `%s | ${site.title}`,
   },
-  description:
-    "Building open source software together. Home to projects like LBNets, Celestial Linux, and more.",
+  description: site.description,
   keywords: [
     "open source",
     "software",
@@ -16,30 +19,24 @@ export const metadata = {
     "Celestial",
     "Linux",
   ],
-  authors: [{ name: "Aclevo" }],
-  creator: "Aclevo",
+  authors: [{ name: site.title }],
+  creator: site.title,
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.aclevo.com",
-    siteName: "Aclevo",
-    title: "Aclevo",
-    description:
-      "Building open source software together. Home to projects like LBNets, Celestial Linux, and more.",
+    url: org.websiteUrl,
+    siteName: site.title,
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Aclevo",
+        alt: site.title,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Aclevo",
-    description:
-      "Building open source software together. Home to projects like LBNets, Celestial Linux, and more.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -51,7 +48,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="glass">
-      <SiteLayout>{children}</SiteLayout>
+      <ErrorBoundary>
+        <SiteLayout>{children}</SiteLayout>
+      </ErrorBoundary>
     </html>
   );
 }

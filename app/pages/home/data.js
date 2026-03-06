@@ -1,21 +1,20 @@
-export const siteTitle = "Aclevo";
+import { config } from "../../config";
 
-const GITHUB_API = "https://api.github.com";
-const ORG = "Aclevo";
-const HEADERS = { Accept: "application/vnd.github.v3+json" };
-const REVALIDATE = 300;
+const { org, github } = config;
 
 const fetchJson = async (url) => {
   const res = await fetch(url, {
-    headers: HEADERS,
-    next: { revalidate: REVALIDATE },
+    headers: github.headers,
+    next: { revalidate: github.revalidate },
   });
-  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+  }
   return res.json();
 };
 
 export async function getTopProject() {
-  const data = await fetchJson(`${GITHUB_API}/repos/${ORG}/LBNets`);
+  const data = await fetchJson(`${org.githubApi}/repos/${org.name}/LBNets`);
   return {
     name: "LBNets",
     tagline: "A revolution in AI technology with baked-in reasoning",
@@ -28,9 +27,14 @@ export async function getTopProject() {
 }
 
 export async function getProjects() {
-  const repos = await fetchJson(`${GITHUB_API}/orgs/${ORG}/repos`);
+  const repos = await fetchJson(`${org.githubApi}/orgs/${org.name}/repos`);
   return repos
-    .filter((repo) => !repo.fork && !repo.archived && repo.name !== ".github")
+    .filter(
+      (repo) =>
+        !repo.fork &&
+        !repo.archived &&
+        !github.excludedRepos.includes(repo.name),
+    )
     .map((repo) => ({
       name: repo.name,
       summary: repo.description || "No description",
@@ -44,8 +48,8 @@ export async function getProjects() {
 
 export async function getStats() {
   const [orgData, members] = await Promise.all([
-    fetchJson(`${GITHUB_API}/orgs/${ORG}`),
-    fetchJson(`${GITHUB_API}/orgs/${ORG}/members`),
+    fetchJson(`${org.githubApi}/orgs/${org.name}`),
+    fetchJson(`${org.githubApi}/orgs/${org.name}/members`),
   ]);
   return [
     { label: "Public Repos", value: orgData.public_repos },
@@ -55,14 +59,20 @@ export async function getStats() {
 }
 
 export async function getMembers() {
-  const members = await fetchJson(`${GITHUB_API}/orgs/${ORG}/members`);
+  const members = await fetchJson(`${org.githubApi}/orgs/${org.name}/members`);
   const users = await Promise.all(
-    members.map((m) => fetchJson(`${GITHUB_API}/users/${m.login}`)),
+    members.map((m) => fetchJson(`${org.githubApi}/users/${m.login}`)),
   );
   const socials = await Promise.all(
     users.map((u) =>
-      fetchJson(`${GITHUB_API}/users/${u.login}/social_accounts`).catch(
-        () => [],
+      fetchJson(`${org.githubApi}/users/${u.login}/social_accounts`).catch(
+        (error) => {
+          console.error(
+            `Failed to fetch social accounts for ${u.login}:`,
+            error,
+          );
+          return [];
+        },
       ),
     ),
   );

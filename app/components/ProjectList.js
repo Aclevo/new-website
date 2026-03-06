@@ -1,4 +1,4 @@
-let ProjectList = ({ projects }) => {
+const ProjectList = ({ projects }) => {
   return (
     <section id="projects" className="grid gap-4 md:grid-cols-3">
       {projects.map((project) => (
@@ -14,7 +14,6 @@ let ProjectList = ({ projects }) => {
               <a
                 href={project.html_url}
                 target="_blank"
-                rel="noopener noreferrer"
                 className="hover:text-primary"
               >
                 {project.name}
@@ -31,7 +30,6 @@ let ProjectList = ({ projects }) => {
                 href={project.html_url}
                 className="btn btn-sm btn-ghost border border-white/20 bg-base-100/20"
                 target="_blank"
-                rel="noopener noreferrer"
               >
                 View Repository
               </a>

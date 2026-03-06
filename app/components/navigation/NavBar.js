@@ -1,3 +1,4 @@
+import { config } from "../../config";
 import Link from "next/link";
 import { Anta } from "next/font/google";
 
@@ -53,7 +54,7 @@ const NavBar = () => {
           </ul>
         </div>
         <Link href="/" className="btn btn-ghost text-2xl font-semibold">
-          Aclevo
+          {config.org.name}
         </Link>
       </div>
 
@@ -64,7 +65,7 @@ const NavBar = () => {
       </div>
 
       <div className="navbar-end">
-        <a href="https://github.com/Aclevo/">
+        <a href={config.org.githubUrl}>
           <button className="btn btn-primary btn-soft text-xl py-7">
             Star on GitHub
           </button>
