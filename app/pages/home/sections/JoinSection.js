@@ -18,12 +18,12 @@ const JoinSection = () => {
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <a href={config.org.discordUrl} className="btn btn-primary">
+          <a href={config.org.discordUrl} className="btn btn-primary shadow-xl">
             Join Discord
           </a>
           <a
             href={`${config.org.githubUrl}/repositories`}
-            className="btn btn-secondary btn-soft"
+            className="btn btn-primary btn-outline bg-base-100/20 shadow-xl"
             target="_blank"
           >
             Open Good First Issues

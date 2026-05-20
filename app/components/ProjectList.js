@@ -7,7 +7,7 @@ const ProjectList = ({ projects }) => {
           className="card border border-white/15 bg-base-100/25 shadow-lg backdrop-blur-xl"
         >
           <div className="card-body">
-            <span className="badge badge-accent badge-soft w-fit">
+            <span className="badge badge-primary badge-outline bg-base-100/20 text-white w-fit">
               {project.status}
             </span>
             <h2 className="card-title text-xl">
