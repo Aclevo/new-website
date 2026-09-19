@@ -42,16 +42,18 @@ const fetchWithRetry = async (url, retries = 3) => {
 export const getTopProject = cache(async () => {
   "use cache";
   const data = await fetchWithRetry(
-    `${org.githubApi}/repos/${org.name}/LBNets`,
+    `${org.githubApi}/repos/${org.name}/Project-Astronomy`,
   );
   return {
-    name: "LBNets",
-    tagline: "A revolution in AI technology with baked-in reasoning",
+    name: "Project Astronomy",
+    tagline: "Port of Celestial to Automated Linux From Scratch",
     description:
-      "Try out the latest innovation to artifical intelligence! Try out our first ever Logic-Based/Reasoning-Based Transformers!",
+      "Try out our first ever port of Celestial! We've converted the entire project into a functional Automated Linux-based operating system, directly from scratch!",
     stars: data.stargazers_count,
     contributors: data.contributors_count,
     openIssues: data.open_issues_count,
+    repoLink: "https://github.com/Aclevo/Project-Astronomy",
+    issuesLink: "https://github.com/Aclevo/Project-Astronomy/issues"
   };
 });
 

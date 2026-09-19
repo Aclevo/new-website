@@ -11,14 +11,14 @@ const HeroSection = ({ topProject }) => {
           <p className="text-base-content/80">{topProject.description}</p>
           <div className="flex flex-wrap gap-3">
             <a
-              href="https://github.com/Aclevo/LBNets"
+              href={topProject.repoLink}
               className="btn btn-primary"
               target="_blank"
             >
               View Repository
             </a>
             <a
-              href="https://github.com/orgs/Aclevo/LBNets/issues/new"
+              href={topProject.issuesLink}
               className="btn btn-ghost border border-white/20 bg-base-100/20"
               target="_blank"
             >

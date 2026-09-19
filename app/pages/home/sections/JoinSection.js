@@ -22,7 +22,7 @@ const JoinSection = () => {
             Join Discord
           </a>
           <a
-            href={`${config.org.githubUrl}/repositories`}
+            href={`${config.org.githubUrl}/org/repositories`}
             className="btn btn-secondary btn-soft"
             target="_blank"
           >
