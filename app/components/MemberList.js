@@ -25,7 +25,7 @@ const MemberList = ({ members }) => {
         .map((member, index) => (
           <article
             key={member.username}
-            className="card border border-white/15 bg-base-100/25 shadow-lg backdrop-blur-xl"
+            className="card border border-white/15 bg-base-100/50 shadow-lg backdrop-blur-xl transition duration-[0.3s] hover:shadow-cyan-50"
           >
             <div className="card-body flex flex-col items-center">
               <Image

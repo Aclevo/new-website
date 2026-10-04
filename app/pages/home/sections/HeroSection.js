@@ -1,11 +1,9 @@
 const HeroSection = ({ topProject }) => {
   return (
-    <section className="hero overflow-hidden rounded-[2rem] border border-primary/25 bg-base-100/35 shadow-2xl shadow-black/30 backdrop-blur-xl">
+    <section className="hero overflow-hidden rounded-[2rem] border border-primary/25 bg-base-100/50 shadow-2xl shadow-black/30 backdrop-blur-xl">
       <div className="hero-content w-full flex-col items-start gap-8 p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-2xl space-y-5">
-          <div className="badge badge-primary badge-outline bg-base-100/20 text-white">
-            Top Project
-          </div>
+          <div className="badge badge-primary badge-outline bg-base-100/20 text-white">Top Project</div>
           <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
             {topProject.name}
           </h1>
@@ -13,14 +11,14 @@ const HeroSection = ({ topProject }) => {
           <p className="text-base-content/80">{topProject.description}</p>
           <div className="flex flex-wrap gap-3">
             <a
-              href="https://github.com/Aclevo/LBNets"
+              href={topProject.repoLink}
               className="btn btn-primary"
               target="_blank"
             >
               View Repository
             </a>
             <a
-              href="https://github.com/orgs/Aclevo/LBNets/issues/new"
+              href={topProject.issuesLink}
               className="btn btn-ghost border border-white/20 bg-base-100/20"
               target="_blank"
             >

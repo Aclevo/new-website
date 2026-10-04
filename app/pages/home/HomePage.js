@@ -4,7 +4,8 @@ import ProjectList from "../../components/ProjectList";
 import HeroSection from "./sections/HeroSection";
 import CommunitySection from "./sections/CommunitySection";
 import JoinSection from "./sections/JoinSection";
-import { getTopProject, getProjects, getStats, getMembers } from "./data";
+import PartnerList from '../../components/PartnerList'
+import { getTopProject, getProjects, getStats, getMembers, getPartnerList } from "./data";
 
 const LoadingSkeleton = () => (
   <div className="space-y-8">
@@ -43,6 +44,8 @@ const HomePageContent = async () => {
       <MemberList members={members} />
       <div className="divider divider-primary">Our Projects</div>
       <ProjectList projects={projects} />
+      <div className="divider divider-primary">Our Partners</div>
+      <PartnerList partners={getPartnerList} />
       <JoinSection />
     </div>
   );

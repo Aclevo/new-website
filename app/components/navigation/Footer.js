@@ -7,7 +7,7 @@ const Footer = () => {
   const currentYear = 2026;
 
   return (
-    <footer className="mt-16 border-t border-white/15 bg-base-100/25 backdrop-blur-xl rounded-3xl">
+    <footer className="mt-16 border-t border-white/15 bg-base-100/50 backdrop-blur-xl rounded-3xl">
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="text-center md:text-left">
