@@ -13,7 +13,7 @@ const manrope = Manrope({
 const SiteLayout = ({ children }) => {
   return (
     <body
-      className={`${manrope.className} min-h-screen bg-base-100 text-base-content antialiased`}
+      className={`${manrope.className} min-h-screen bg-linear-to-tr from-[rgb(85,153,255)] to-[rgb(85,85,255)] text-base-content antialiased`}
     >
       <a
         href="#main-content"

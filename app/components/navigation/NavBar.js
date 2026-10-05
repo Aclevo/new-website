@@ -11,6 +11,7 @@ const links = {
   home: "/",
   projects: "#projects",
   contributors: "#contributors",
+  partners: "#partners"
 };
 
 const renderLinks = () => {
@@ -28,7 +29,7 @@ const NavBar = () => {
 
   return (
     <nav
-      className={` ${AntaFont.className} navbar sticky top-4 z-40 rounded-3xl border border-white/15 bg-base-100/30 px-4 py-4 shadow-2xl shadow-black/30 backdrop-blur-xl`}
+      className={` ${AntaFont.className} navbar sticky top-4 z-40 rounded-3xl border border-white/15 px-4 py-4 bg-base-100/50 backdrop-blur-xl`}
     >
       <div className="navbar-start">
         <div className="dropdown">
@@ -61,7 +62,7 @@ const NavBar = () => {
             {renderLinks()}
           </ul>
         </div>
-        <Link href="/" className="btn btn-ghost text-2xl font-semibold">
+        <Link href="/" className="btn btn-ghost text-3xl font-extrabold">
           {config.org.name}
         </Link>
       </div>
@@ -74,7 +75,7 @@ const NavBar = () => {
 
       <div className="navbar-end">
         <a href={config.org.githubUrl}>
-          <button className="btn btn-primary btn-soft text-xl py-7">
+          <button className="btn btn-primary btn-soft text-xl py-7 bg-base-100/50 text-white">
             Star on GitHub
           </button>
         </a>

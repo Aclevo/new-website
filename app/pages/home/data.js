@@ -57,6 +57,17 @@ export const getTopProject = cache(async () => {
   };
 });
 
+export const getPartnerList = [
+  {
+    id: 0,
+    name: "TTNRT Corporation",
+    shortName: "TTNRT",
+    avatar_url: "https://avatars.githubusercontent.com/u/103219889?s=200&v=4",
+    since_date: new Date("4-19-2024"),
+    website: "https://ttnrtsite.me"
+  }
+]
+
 export const getProjects = cache(async () => {
   "use cache";
   const repos = await fetchWithRetry(`${org.githubApi}/orgs/${org.name}/repos`);
